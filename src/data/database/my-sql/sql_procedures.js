@@ -13,7 +13,6 @@ const insertDetailOrder = (detail, id) => {
   const idMenu = detail.menu.id
   const quantity = detail.quantity
   const comment = detail.comment ?? 'NULL'
-  console.log('pase por aca')
   return {
     name: 'SP_INSERTAR_DETALLE_PEDIDO',
     statements: [

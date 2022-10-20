@@ -18,9 +18,12 @@ router.post(`/Orders/v1/orders`, async (req, res, next) => {
 
 router.post(`/Orders/v1/orders/:id`, async (req, res, next) => {
   try {
-    await insertOrderDetailService.execute(req.body.order.details, req.params.id)
+    const errors = await insertOrderDetailService.execute(
+      req.body.order.details,
+      req.params.id
+    )
     const message = 'Detalle de pedido registrado con exito'
-    const response = { message }
+    const response = { message, errors }
     logger.info({ message, data: JSON.stringify(response) })
     res.status(201).json(response)
   } catch (error) {
