@@ -5,7 +5,7 @@ const { orderConverter } = require('../../converter/order.converter')
 const execute = async (order) => {
   try {
     const orderData = await insertOrder(order)
-    return orderConverter(orderData[0])
+    return orderConverter(orderData[0], null)
   } catch (error) {
     throw error
   }

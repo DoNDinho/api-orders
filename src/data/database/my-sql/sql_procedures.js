@@ -22,7 +22,16 @@ const insertDetailOrder = (detail, id) => {
   }
 }
 
+const listOrderById = (id) => {
+  return {
+    name: 'SP_LISTAR_PEDIDO_POR_ID',
+    statements: [`CALL SP_LISTAR_PEDIDO_POR_ID(${id});`],
+    values: []
+  }
+}
+
 module.exports = {
   insertOrder,
-  insertDetailOrder
+  insertDetailOrder,
+  listOrderById
 }

@@ -1,6 +1,7 @@
 const express = require('express')
 const insertOrderService = require('../../business/services/orders/insert-order.service')
 const insertOrderDetailService = require('../../business/services/orders/insert-order-detail.service')
+const listOrderByIdService = require('../../business/services/orders/list-order-by-id.service')
 const router = express.Router()
 
 router.post(`/Orders/v1/orders`, async (req, res, next) => {
@@ -26,6 +27,19 @@ router.post(`/Orders/v1/orders/:id`, async (req, res, next) => {
     const response = { message, errors }
     logger.info({ message, data: JSON.stringify(response) })
     res.status(201).json(response)
+  } catch (error) {
+    console.log('error: ', error.message)
+    next(error)
+  }
+})
+
+router.get(`/Orders/v1/orders/:id`, async (req, res, next) => {
+  try {
+    const order = await listOrderByIdService.execute(req.params.id)
+    const message = 'Pedido obtenido con exito'
+    const response = { order }
+    logger.info({ message, data: JSON.stringify(response) })
+    res.status(200).json(response)
   } catch (error) {
     console.log('error: ', error.message)
     next(error)
