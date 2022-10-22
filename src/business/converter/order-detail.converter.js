@@ -9,6 +9,9 @@ const orderDetailConverter = (orderData) => {
     },
     quantity: orderData.CANTIDAD
   }
+  if (orderData.ID_DETALLE) detail.id = orderData.ID_DETALLE
+  if (orderData.NUMERO_MESA) detail.table = { number: orderData.NUMERO_MESA }
+  if (orderData.COMENTARIO) detail.comment = orderData.COMENTARIO
   return detail
 }
 

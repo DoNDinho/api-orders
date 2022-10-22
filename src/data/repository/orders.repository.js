@@ -42,8 +42,22 @@ const listOrderById = async (id) => {
   }
 }
 
+const listDetailOrder = async () => {
+  try {
+    const mySqlClient = await MySqlClient.getInstance()
+    const procedure = sqlProcedures.listDetailOrder()
+    const sqlRunner = new MySqlRunner(mySqlClient)
+    const result = await sqlRunner.runProcedure(procedure)
+    console.log(JSON.stringify(result))
+    return result.pop()[0]
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   insertOrder,
   insertDetailOrder,
-  listOrderById
+  listOrderById,
+  listDetailOrder
 }
