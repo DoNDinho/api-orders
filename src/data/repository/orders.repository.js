@@ -55,9 +55,37 @@ const listDetailOrder = async () => {
   }
 }
 
+const takeOrder = async (id) => {
+  try {
+    const mySqlClient = await MySqlClient.getInstance()
+    const procedure = sqlProcedures.takeOrder(id)
+    const sqlRunner = new MySqlRunner(mySqlClient)
+    const result = await sqlRunner.runProcedure(procedure)
+    console.log(JSON.stringify(result))
+    return result.pop()[0]
+  } catch (error) {
+    throw error
+  }
+}
+
+const deliverOrder = async (id) => {
+  try {
+    const mySqlClient = await MySqlClient.getInstance()
+    const procedure = sqlProcedures.deliverOrder(id)
+    const sqlRunner = new MySqlRunner(mySqlClient)
+    const result = await sqlRunner.runProcedure(procedure)
+    console.log(JSON.stringify(result))
+    return result.pop()[0]
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   insertOrder,
   insertDetailOrder,
   listOrderById,
-  listDetailOrder
+  listDetailOrder,
+  takeOrder,
+  deliverOrder
 }

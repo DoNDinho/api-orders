@@ -38,9 +38,28 @@ const listDetailOrder = () => {
   }
 }
 
+const takeOrder = (id) => {
+  return {
+    name: 'SP_TOMAR_PEDIDO',
+    statements: [`CALL SP_TOMAR_PEDIDO(${id});`],
+    values: []
+  }
+}
+
+const deliverOrder = (id) => {
+  console.log(id)
+  return {
+    name: 'SP_ENTREGAR_PEDIDO',
+    statements: [`CALL SP_ENTREGAR_PEDIDO(${id});`],
+    values: []
+  }
+}
+
 module.exports = {
   insertOrder,
   insertDetailOrder,
   listOrderById,
-  listDetailOrder
+  listDetailOrder,
+  takeOrder,
+  deliverOrder
 }
