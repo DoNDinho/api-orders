@@ -6,10 +6,13 @@ const bodyParser = require('body-parser')
 global.logger = require('./business/utils/configs/log4js.config')
 const healthRoute = require('./client/routes/health')
 const ordersRoutes = require('./client/routes/orders.routes')
+const Socket = require('./business/utils/socket/socket')
 const { errorHandler } = require('./client/middlewares/error-handler/error-handler')
 const port = process.env.PORT
 
 const app = express()
+const { Server: WebSocketServer } = require('socket.io')
+const http = require('http')
 
 // Configurando middlewares
 app.use(cors())
@@ -25,6 +28,11 @@ app.use(async (err, req, res, next) => {
 })
 
 // Iniciando servidor
-app.listen(port, () => {
-  logger.info('Servidor en puerto', port)
+const server = http.createServer(app)
+const httpServer = server.listen(port, () => {
+  console.log('Servidor en puerto', port)
 })
+const io = new WebSocketServer(httpServer, {
+  cors: { origin: '*' }
+})
+Socket.getInstance(io)

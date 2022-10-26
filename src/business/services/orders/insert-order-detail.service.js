@@ -1,9 +1,15 @@
 'use strict'
 const orderRepository = require('../../../data/repository/orders.repository')
+const { orderDetailConverter } = require('../../converter/order-detail.converter')
+const Socket = require('../../utils/socket/socket')
 
 const execute = async (details, id) => {
   try {
-    const errors = await insertDetailOrder(details, parseInt(id))
+    const { errors, orders } = await insertDetailOrder(details, parseInt(id))
+
+    if (orders.length != 0) {
+      publishOrderEvents(orders)
+    }
     return createErrors(errors)
   } catch (error) {
     throw error
@@ -18,12 +24,16 @@ const insertDetailOrder = async (details, id) => {
     const errors = results
       .filter((result) => result.status == 'rejected')
       .map((result) => result.reason.message)
+    const orders = results
+      .filter((result) => result.status == 'fulfilled')
+      .map((result) => result.value[0])
+
     if (errors.length == results.length) {
       const error = new Error('No se pudo ingresar el pedido')
       error.errors = createErrors(errors)
       throw error
     }
-    return errors
+    return { errors, orders: orders }
   } catch (error) {
     throw { httpCode: 422, message: error.message }
   }
@@ -36,6 +46,15 @@ const createErrors = (errors) => {
     })
   }
   return []
+}
+
+const publishOrderEvents = (orders) => {
+  const socket = Socket.getInstance()
+  const event = 'orderDetails'
+  for (const order of orders) {
+    socket.emit(event, orderDetailConverter(order))
+    console.log('Evento publicado')
+  }
 }
 
 module.exports = { execute }
