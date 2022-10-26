@@ -64,9 +64,9 @@ router.get(`/Orders/v1/details`, async (req, res, next) => {
 
 router.put(`/Orders/v1/details/:id/take-order`, async (req, res, next) => {
   try {
-    await takeOrderService.execute(req.params.id)
+    const status = await takeOrderService.execute(req.params.id)
     const message = 'Pedido tomado con exito'
-    const response = { message }
+    const response = { message, status }
     logger.info({ message, data: JSON.stringify(response) })
     res.status(200).json(response)
   } catch (error) {
