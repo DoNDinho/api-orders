@@ -49,11 +49,14 @@ const createErrors = (errors) => {
 }
 
 const publishOrderEvents = (orders) => {
-  const socket = Socket.getInstance()
-  const event = 'orderDetails'
-  for (const order of orders) {
-    socket.emit(event, orderDetailConverter(order))
-    console.log('Evento publicado')
+  try {
+    const socket = Socket.getInstance()
+    const event = 'orderDetails'
+    for (const order of orders) {
+      socket.emit(event, orderDetailConverter(order))
+    }
+  } catch (error) {
+    console.log('No hay usuarios conectados al socket')
   }
 }
 
