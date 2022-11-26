@@ -1,6 +1,7 @@
 'use strict'
 const orderRepository = require('../../../data/repository/orders.repository')
 const { orderDetailConverter } = require('../../converter/order-detail.converter')
+const { createAlert } = require('../../../data/repository/alerts.repository')
 const Socket = require('../../utils/socket/socket')
 
 const execute = async (details, id) => {
@@ -10,6 +11,7 @@ const execute = async (details, id) => {
     if (orders.length != 0) {
       publishOrderEvents(orders)
     }
+    createAlert()
     return createErrors(errors)
   } catch (error) {
     throw error
